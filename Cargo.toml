@@ -1,0 +1,11 @@
+[package]
+name = "cibushub-cli"
+description = "CLI recipes, meal/grocery planning, and pantry tracker"
+version = "0.0.1"
+authors = ["Daniel Way <contact@danieldway.com>"]
+license = "MIT"
+repository = "https://github.com/cibushub/cli"
+exclude = [".github"]
+edition = "2021"
+
+[dependencies]
