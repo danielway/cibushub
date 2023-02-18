@@ -1,4 +1,4 @@
-use std::io::stdout;
+use std::{io::stdout, thread::sleep, time::Duration};
 
 use crossterm::event::{read, Event, KeyCode};
 use tty_interface::{Interface, Result, Position, pos};
@@ -12,8 +12,13 @@ fn execute() -> Result<()> {
     let mut interface = Interface::new_alternate(&mut stdout)?;
 
     loop {
-        if let Some(_screen) = main_menu(&mut interface)? {
-            // TODO
+        if let Some(screen) = main_menu(&mut interface)? {
+            match screen {
+                Screen::MealPlan => meal_plan(&mut interface)?,
+                Screen::Grocery => grocery(&mut interface)?,
+                Screen::Recipes => recipes(&mut interface)?,
+                Screen::Pantry => pantry(&mut interface)?,
+            }
         } else {
             break;
         }
@@ -70,13 +75,72 @@ fn main_menu(interface: &mut Interface) -> Result<Option<Screen>> {
     }
 }
 
+fn meal_plan(interface: &mut Interface) -> Result<()> {
+    loop {
+        interface.clear_rest_of_interface(pos!(0, 0));
+        interface.set(pos!(0, 0), "== Meal Plan ==");
+
+        interface.apply()?;
+
+        sleep(Duration::from_millis(2000));
+
+        break;
+    }
+
+    Ok(())
+}
+
+fn grocery(interface: &mut Interface) -> Result<()> {
+    loop {
+        interface.clear_rest_of_interface(pos!(0, 0));
+        interface.set(pos!(0, 0), "== Grocery ==");
+
+        interface.apply()?;
+
+        sleep(Duration::from_millis(2000));
+
+        break;
+    }
+    
+    Ok(())
+}
+
+fn recipes(interface: &mut Interface) -> Result<()> {
+    loop {
+        interface.clear_rest_of_interface(pos!(0, 0));
+        interface.set(pos!(0, 0), "== Recipes ==");
+
+        interface.apply()?;
+
+        sleep(Duration::from_millis(2000));
+
+        break;
+    }
+    
+    Ok(())
+}
+
+fn pantry(interface: &mut Interface) -> Result<()> {
+    loop {
+        interface.clear_rest_of_interface(pos!(0, 0));
+        interface.set(pos!(0, 0), "== Pantry ==");
+
+        interface.apply()?;
+
+        sleep(Duration::from_millis(2000));
+
+        break;
+    }
+    
+    Ok(())
+}
+
 #[derive(Copy, Clone)]
-enum Screen { MainMenu, MealPlan, Grocery, Recipes, Pantry }
+enum Screen { MealPlan, Grocery, Recipes, Pantry }
 
 impl Screen {
     fn get_text(self) -> String {
         match self {
-            Screen::MainMenu => "Main Menu",
             Screen::MealPlan => "Meal Plan",
             Screen::Grocery => "Grocery",
             Screen::Recipes => "Recipes",
@@ -84,7 +148,7 @@ impl Screen {
         }.to_string()
     }
 
-    fn all() -> [Screen; 5] {
-        [Screen::MainMenu, Screen::MealPlan, Screen::Grocery, Screen::Recipes, Screen::Pantry]
+    fn all() -> [Screen; 4] {
+        [Screen::MealPlan, Screen::Grocery, Screen::Recipes, Screen::Pantry]
     }
 }
