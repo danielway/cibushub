@@ -10,3 +10,5 @@ edition = "2021"
 
 [dependencies]
 tty-interface = "4"
+tty-form = "2"
+tty-text = "2"
