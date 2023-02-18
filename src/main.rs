@@ -1,7 +1,7 @@
 use std::{io::stdout, thread::sleep, time::Duration};
 
 use crossterm::event::{read, Event, KeyCode};
-use tty_interface::{Interface, Result, Position, pos};
+use tty_interface::{pos, Interface, Position, Result};
 
 fn main() {
     execute().unwrap()
@@ -35,7 +35,7 @@ fn main_menu(interface: &mut Interface) -> Result<Option<Screen>> {
     loop {
         interface.clear_rest_of_interface(pos!(0, 0));
         interface.set(pos!(0, 0), "== Main Menu ==");
-    
+
         for (item, option) in options.iter().enumerate() {
             if selected == item {
                 interface.set(pos!(2, item as u16 + 2), ">");
@@ -43,7 +43,7 @@ fn main_menu(interface: &mut Interface) -> Result<Option<Screen>> {
 
             interface.set(pos!(4, item as u16 + 2), &option.get_text());
         }
-    
+
         interface.apply()?;
 
         loop {
@@ -68,7 +68,7 @@ fn main_menu(interface: &mut Interface) -> Result<Option<Screen>> {
                     KeyCode::Enter => return Ok(Some(options[selected])),
                     KeyCode::Esc => return Ok(None),
                     _ => {}
-                }
+                },
                 _ => {}
             }
         }
@@ -101,7 +101,7 @@ fn grocery(interface: &mut Interface) -> Result<()> {
 
         break;
     }
-    
+
     Ok(())
 }
 
@@ -116,7 +116,7 @@ fn recipes(interface: &mut Interface) -> Result<()> {
 
         break;
     }
-    
+
     Ok(())
 }
 
@@ -131,12 +131,17 @@ fn pantry(interface: &mut Interface) -> Result<()> {
 
         break;
     }
-    
+
     Ok(())
 }
 
 #[derive(Copy, Clone)]
-enum Screen { MealPlan, Grocery, Recipes, Pantry }
+enum Screen {
+    MealPlan,
+    Grocery,
+    Recipes,
+    Pantry,
+}
 
 impl Screen {
     fn get_text(self) -> String {
@@ -144,11 +149,17 @@ impl Screen {
             Screen::MealPlan => "Meal Plan",
             Screen::Grocery => "Grocery",
             Screen::Recipes => "Recipes",
-            Screen::Pantry => "Pantry"
-        }.to_string()
+            Screen::Pantry => "Pantry",
+        }
+        .to_string()
     }
 
     fn all() -> [Screen; 4] {
-        [Screen::MealPlan, Screen::Grocery, Screen::Recipes, Screen::Pantry]
+        [
+            Screen::MealPlan,
+            Screen::Grocery,
+            Screen::Recipes,
+            Screen::Pantry,
+        ]
     }
 }
